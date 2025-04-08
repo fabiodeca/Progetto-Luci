@@ -11,8 +11,10 @@ if ($conn->connect_error) {
 }
 
 $email = $_POST['email'];
-$password = $_POST['password'];
+$azienda_di_provenienza = $_POST['azienda_di_provenienza'];
+$ora_registrazione = $_POST['ora_registrazione'];
 
+// Verifica se l'utente esiste
 $sql = "SELECT * FROM utenti WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
@@ -21,11 +23,14 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if (password_verify($password, $row['password'])) {
-        header("Location: promemoria_prova.php");
-    } else {
-        header("Location: login_error.html");
-    }
+    
+    $sql_insert = "INSERT INTO registrazioni (email, azienda_di_provenienza, ora_registrazione) VALUES (?, ?, ?)";
+    $stmt_insert = $conn->prepare($sql_insert);
+    $stmt_insert->bind_param("sss", $email, $azienda_di_provenienza, $ora_registrazione);
+    $stmt_insert->execute();
+    $stmt_insert->close();
+
+    echo "Registrazione completata con successo!";
 } else {
     header("Location: register.html");
 }

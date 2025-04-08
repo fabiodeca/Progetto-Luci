@@ -10,14 +10,13 @@ if ($conn->connect_error) {
     die("Connessione fallita: " . $conn->connect_error);
 }
 
+$nome = $_POST['nome'];
+$cognome = $_POST['cognome'];
 $email = $_POST['email'];
-$password = $_POST['password'];
 
-$hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-$sql = "INSERT INTO utenti (email, password) VALUES (?, ?)";
+$sql = "INSERT INTO utenti (nome, cognome, email) VALUES (?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $email, $hashed_password);
+$stmt->bind_param("sss", $nome, $cognome, $email);
 
 if ($stmt->execute()) {
     header("Location: index.html");

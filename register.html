@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style_Register.css">
-    <title>Register</title>
+    <title>Registrazione</title>
 </head>
 <body>
     
     <div class="register-container">
         <img src="register_icon.png" alt="login">
-    <h2>Register</h2>
+    <h2>Registrazione Utente</h2>
         <form action="register_page.php" method="post">
+            <input type="text" name="nome" placeholder="Nome" required>
+            <input type="text" name="cognome" placeholder="Cognome" required>
             <input type="text" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Register</button>
+            <button type="submit">Registrati nell'Azienda</button>
         </form>
     </div>
 </body>
