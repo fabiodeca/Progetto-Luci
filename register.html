@@ -10,13 +10,38 @@
     
     <div class="register-container">
         <img src="register_icon.png" alt="login">
-    <h2>Registrati Per La Visita</h2>
+    <h2>Registrati Per l'Entrata</h2>
         <form action="register_page.php" method="post">
             <input type="text" name="nome" placeholder="Nome" required>
             <input type="text" name="cognome" placeholder="Cognome" required>
             <input type="text" name="email" placeholder="Email" required>
+            <select name="tipo_visita" id="tipo_visita" required onchange="toggleInputFields()">
+                <option value="" disabled selected>Seleziona il motivo della visita</option>
+                <option value="azienda">In visita da parte di un'altra azienda</option>
+                <option value="altro">Altro</option>
+            </select>
+            <input type="text" id="azienda_field" name="azienda" placeholder="Nome dell'Azienda di Provenienza" style="display: none;" required>
+            <input type="text" id="professione_field" name="professione" placeholder="Professione" style="display: none;" required>
             <button type="submit">Registrati nell'Azienda</button>
         </form>
     </div>
+    <script>
+        function toggleInputFields() {
+            const tipoVisita = document.getElementById('tipo_visita').value;
+            const aziendaField = document.getElementById('azienda_field');
+            const professioneField = document.getElementById('professione_field');
+
+            if (tipoVisita === 'azienda') {
+                aziendaField.style.display = 'block';
+                professioneField.style.display = 'none';
+            } else if (tipoVisita === 'altro') {
+                aziendaField.style.display = 'none';
+                professioneField.style.display = 'block';
+            } else {
+                aziendaField.style.display = 'none';
+                professioneField.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>

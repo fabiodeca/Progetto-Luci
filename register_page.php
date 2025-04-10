@@ -13,10 +13,13 @@ if ($conn->connect_error) {
 $nome = $_POST['nome'];
 $cognome = $_POST['cognome'];
 $email = $_POST['email'];
+$tipo_visita = $_POST['tipo_visita'];
+$azienda = $_POST['azienda'];
+$professione = $_POST['professione'];
 
-$sql = "INSERT INTO utenti (nome, cognome, email) VALUES (?, ?, ?)";
+$sql = "INSERT INTO utenti (nome, cognome, email, tipo_visita, azienda, professione) VALUES (?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sss", $nome, $cognome, $email);
+$stmt->bind_param("ssssss", $nome, $cognome, $email, $tipo_visita, $azienda, $professione);
 
 if ($stmt->execute()) {
     header("Location: index.html");
