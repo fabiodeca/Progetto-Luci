@@ -13,8 +13,8 @@ img{
     position: relative;
     left: 0;
     top: 10px;
-    display: block; /* Aggiunto per centrare l'immagine */
-    margin: 0 auto; /* Centrato orizzontalmente */
+    display: block;
+    margin: 0 auto;
 }
 .register-container {
     background-color: #f9fbe7;
@@ -42,8 +42,8 @@ img{
     bottom: 10px;
     background-color: #f1f8e9;
     transition: border-color 0.3s;
-    display: block; /* Aggiunto per centrare gli input */
-    margin: 10px auto; /* Centrato orizzontalmente */
+    display: block;
+    margin: 10px auto;
 }
 
 .register-container input:focus {
