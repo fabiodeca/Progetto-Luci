@@ -1,0 +1,150 @@
+body {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px;
+    background-color: #e8f5e9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+img{
+    max-width: 65%;
+    position: relative;
+    left: 0;
+    top: 10px;
+    display: block;
+    margin: 0 auto;
+}
+.register-container {
+    padding: 30px;
+    box-shadow: none;
+    width: 350px;
+}
+.register-container h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #388e3c;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+.register-container input {
+    position: relative;
+    width: 280px;
+    padding: 10px;
+    margin: 4px auto;
+    border: 2px solid #a5d6a7;
+    border-radius: 4px;
+    bottom: 10px;
+    background-color: #f1f8e9;
+    transition: border-color 0.3s;
+    display: block;
+}
+
+.register-container input:focus {
+    border-color: #66bb6a;
+    outline: none;
+}
+
+.register-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #43a047;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+.register-container button:hover {
+    background-color: #2e7d32;
+}
+
+
+.register-container select {
+    width: 280px;
+    padding: 10px;
+    padding-right: 30px;
+    margin: 10px auto;
+    margin-bottom: 15px;
+    border: 2px solid #a5d6a7;
+    border-radius: 4px;
+    background-color: #f1f8e9;
+    font-size: 16px;
+    color: #333;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23333"%3E%3Cpath d="M7 10l5 5 5-5z"/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 15px;
+    display: block;
+}
+
+.register-container select:focus {
+    border-color: #66bb6a;
+    outline: none;
+    box-shadow: 0 0 5px rgba(102, 187, 106, 0.5);
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    color: #333;
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 15px;
+}
+
+select:focus {
+    border-color: #007BFF;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+form input, form select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#azienda_field,
+#professione_field {
+    display: none;
+    margin-top: -1px;
+}
+
+@media (min-width: 768px) {
+    .register-container {
+        padding: 30px;
+        width: 50%;
+        max-width: 350px;
+    }
+
+    .register-container h2 {
+        font-size: 24px;
+    }
+
+    .register-container button {
+        font-size: 18px;
+    }
+}
