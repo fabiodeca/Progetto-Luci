@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style_index.css">
-    <title>Login</title>
+    <title>Accedi per l'Entrata</title>
 </head>
 <body>
     
     <div class="login-container">
         <img src="login_icon.png" alt="login">
-    <h2>Login</h2>
+    <h2>Accedi</h2>
         <form action="verifica_login.php" method="post">
-            <input type="text" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <p style="color:red;">Password Errata</p>
-            <button type="submit">Login</button>
+            <input type="text" name="codice" placeholder="Inserisci Il Codice Fornito" required>
+            <p style="color:red; font-size: 17px; margin-top: 2px; margin-bottom: 13px;">Codice Errato</p>
+            <button type="submit">Invia</button>
         </form>
         <p>Non sei ancora registrato?</p>
         <a href="register.html">Registrati</a>
