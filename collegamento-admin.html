@@ -1,247 +1,237 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestione Ospiti</title>
-</head>
-<body>
-    <div class="container">
-        <h1>Elenco Ospiti</h1>
-        
-        <div class="table-header">
-            <input type="text" id="search" class="search-box" placeholder="Cerca per nome, cognome o azienda..." oninput="filterTable()">
-            <button class="btn" onclick="refreshData()">Aggiorna Dati</button>
-        </div>
-        
-        <div class="table-responsive">
-            <table id="data-table">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable(0)">ID</th>
-                        <th onclick="sortTable(1)">Nome</th>
-                        <th onclick="sortTable(2)">Cognome</th>
-                        <th onclick="sortTable(3)">Azienda</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
-                  
-                </tbody>
-            </table>
-        </div>
-        
-        <div id="status-message" class="status-message loading">
-            Caricamento dati in corso...
-        </div>
-        
-        <div class="pagination" id="pagination">
-            
-        </div>
-    </div>
 
-    <script>
-        // Configurazione
-        const config = {
-            apiUrl: 'collegamento-admin.php', 
-            pageSize: 10,                     
-            defaultSortColumn: 0,            
-            defaultSortDirection: 'asc'       
-        };
-        
-   
-        let allData = [];
-        let currentPage = 1;
-        let sortColumn = config.defaultSortColumn;
-        let sortDirection = config.defaultSortDirection;
-        
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            loadData();
-        });
-        
-       
-        async function loadData() {
-            try {
-                showStatus('Caricamento dati in corso...', 'loading');
-                
-                const response = await fetch(config.apiUrl);
-                
-                if (!response.ok) {
-                    throw new Error(`Errore HTTP: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                if (!Array.isArray(data)) {
-                    throw new Error('Formato dati non valido');
-                }
-                
-                allData = data;
-                updateTable();
-                hideStatus();
-            } catch (error) {
-                console.error('Errore nel caricamento dei dati:', error);
-                showStatus(`Errore: ${error.message}`, 'error');
-            }
-        }
-        
-        
-        function updateTable() {
-            const tableBody = document.getElementById('table-body');
-            const pagination = document.getElementById('pagination');
+    <!DOCTYPE html>
+    <html lang="it">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="collegamento-admin.css">
+        <title>Gestione Ospiti</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Elenco Ospiti</h1>
             
-            if (allData.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="4">Nessun ospite trovato</td></tr>';
-                pagination.innerHTML = '';
-                return;
-            }
+            <div class="table-header">
+                <input type="text" id="search" class="search-box" placeholder="Cerca per nome, cognome o azienda..." oninput="filterTable()">
+                <button class="btn" onclick="refreshData()">Aggiorna Dati</button>
+            </div>
             
-          
-            const sortedData = [...allData].sort((a, b) => {
-                const valA = getSortValue(a, sortColumn);
-                const valB = getSortValue(b, sortColumn);
+            <div class="table-responsive">
+                <table id="data-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">ID</th>
+                            <th onclick="sortTable(1)">Nome</th>
+                            <th onclick="sortTable(2)">Cognome</th>
+                            <th onclick="sortTable(3)">Azienda</th>
+                            <th onclick="sortTable(4)">Data</th>
+                            <th onclick="sortTable(5)">Ora Ingresso</th>
+                            <th onclick="sortTable(6)">Ora Uscita</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="status-message" class="status-message loading">
+                Caricamento dati in corso...
+            </div>
+            
+            <div class="pagination" id="pagination">
                 
-                if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
-                if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
-                return 0;
+            </div>
+        </div>
+
+        <script>
+            const config = {
+                apiUrl: 'collegamento-admin.php',
+                pageSize: 10,
+                defaultSortColumn: 0,
+                defaultSortDirection: 'asc'
+            };
+            
+            let allData = [];
+            let currentPage = 1;
+            let sortColumn = config.defaultSortColumn;
+            let sortDirection = config.defaultSortDirection;
+            
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                loadData();
             });
             
-          
-            const searchTerm = document.getElementById('search').value.toLowerCase();
-            const filteredData = sortedData.filter(ospite => 
-                ospite.nome.toLowerCase().includes(searchTerm) ||
-                ospite.cognome.toLowerCase().includes(searchTerm) ||
-                (ospite.azienda && ospite.azienda.toLowerCase().includes(searchTerm))
-            );
-            
-           
-            const totalPages = Math.ceil(filteredData.length / config.pageSize);
-            currentPage = Math.min(currentPage, totalPages);
-            
-            const startIndex = (currentPage - 1) * config.pageSize;
-            const paginatedData = filteredData.slice(startIndex, startIndex + config.pageSize);
-            
-            
-            tableBody.innerHTML = paginatedData.map(ospite => `
-                <tr>
-                    <td>${escapeHtml(ospite.ID)}</td>
-                    <td>${escapeHtml(ospite.nome)}</td>
-                    <td>${escapeHtml(ospite.cognome)}</td>
-                    <td>${escapeHtml(ospite.azienda || 'N/A')}</td>
-                </tr>
-            `).join('');
-            
-           
-            generatePagination(totalPages);
-        }
-        
-        
-        function sortTable(columnIndex) {
-            if (sortColumn === columnIndex) {
-                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortColumn = columnIndex;
-                sortDirection = 'asc';
-            }
-            
-            updateTable();
-        }
-        
-        
-        function filterTable() {
-            currentPage = 1;
-            updateTable();
-        }
-        
-       
-        function refreshData() {
-            currentPage = 1;
-            loadData();
-        }
-        
-       
-        function generatePagination(totalPages) {
-            const pagination = document.getElementById('pagination');
-            
-            if (totalPages <= 1) {
-                pagination.innerHTML = '';
-                return;
-            }
-            
-            let html = '';
-            const maxVisiblePages = 5;
-            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-            
-         
-            if (startPage > 1) {
-                html += `<button onclick="goToPage(1)">«</button>`;
-            }
-            
-           
-            if (currentPage > 1) {
-                html += `<button onclick="goToPage(${currentPage - 1})">‹</button>`;
-            }
-            
-          
-            for (let i = startPage; i <= endPage; i++) {
-                html += `<button onclick="goToPage(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
-            }
-            
-           
-            if (currentPage < totalPages) {
-                html += `<button onclick="goToPage(${currentPage + 1})">›</button>`;
+            async function loadData() {
+                try {
+                    showStatus('Caricamento dati in corso...', 'loading');
+                    
+                    const response = await fetch(config.apiUrl);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Errore HTTP: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (!Array.isArray(data)) {
+                        throw new Error('Formato dati non valido');
+                    }
+                    
+                    allData = data;
+                    updateTable();
+                    hideStatus();
+                } catch (error) {
+                    console.error('Errore nel caricamento dei dati:', error);
+                    showStatus(`Errore: ${error.message}`, 'error');
+                }
             }
             
             
-            if (endPage < totalPages) {
-                html += `<button onclick="goToPage(${totalPages})">»</button>`;
+            function updateTable() {
+                const tableBody = document.getElementById('table-body');
+                const pagination = document.getElementById('pagination');
+                
+                if (allData.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="4">Nessun ospite trovato</td></tr>';
+                    pagination.innerHTML = '';
+                    return;
+                }
+                
+                const sortedData = [...allData].sort((a, b) => {
+                    const valA = getSortValue(a, sortColumn);
+                    const valB = getSortValue(b, sortColumn);
+                    
+                    if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+                    if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+                    return 0;
+                });
+                
+                const searchTerm = document.getElementById('search').value.toLowerCase();
+                const filteredData = sortedData.filter(ospite =>
+                    ospite.nome.toLowerCase().includes(searchTerm) ||
+                    ospite.cognome.toLowerCase().includes(searchTerm) ||
+                    (ospite.azienda && ospite.azienda.toLowerCase().includes(searchTerm))
+                );
+                
+                const totalPages = Math.ceil(filteredData.length / config.pageSize);
+                currentPage = Math.min(currentPage, totalPages);
+                
+                const startIndex = (currentPage - 1) * config.pageSize;
+                const paginatedData = filteredData.slice(startIndex, startIndex + config.pageSize);
+                
+                
+                tableBody.innerHTML = paginatedData.map(ospite => `
+                    <tr>
+                        <td>${escapeHtml(ospite.ID)}</td>
+                        <td>${escapeHtml(ospite.nome)}</td>
+                        <td>${escapeHtml(ospite.cognome)}</td>
+                        <td>${escapeHtml(ospite.azienda || 'N/A')}</td>
+                    </tr>
+                `).join('');
+                
+                generatePagination(totalPages);
             }
             
-            pagination.innerHTML = html;
-        }
-        
-        
-        function goToPage(page) {
-            currentPage = page;
-            updateTable();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-       
-        function showStatus(message, type) {
-            const statusElement = document.getElementById('status-message');
-            statusElement.textContent = message;
-            statusElement.className = `status-message ${type}`;
-            statusElement.style.display = 'block';
-        }
-        
-        
-        function hideStatus() {
-            document.getElementById('status-message').style.display = 'none';
-        }
-        
-        
-        function getSortValue(ospite, columnIndex) {
-            switch (columnIndex) {
-                case 0: return ospite.ID;
-                case 1: return ospite.nome.toLowerCase();
-                case 2: return ospite.cognome.toLowerCase();
-                case 3: return (ospite.azienda || '').toLowerCase();
-                default: return '';
+            
+            function sortTable(columnIndex) {
+                if (sortColumn === columnIndex) {
+                    sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                } else {
+                    sortColumn = columnIndex;
+                    sortDirection = 'asc';
+                }
+                
+                updateTable();
             }
-        }
-        
-     
-        function escapeHtml(unsafe) {
-            if (unsafe === null || unsafe === undefined) return '';
-            return unsafe.toString()
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-    </script>
-</body>
-</html>
+            
+            
+            function filterTable() {
+                currentPage = 1;
+                updateTable();
+            }
+            
+            function refreshData() {
+                currentPage = 1;
+                loadData();
+            }
+            
+            function generatePagination(totalPages) {
+                const pagination = document.getElementById('pagination');
+                
+                if (totalPages <= 1) {
+                    pagination.innerHTML = '';
+                    return;
+                }
+                
+                let html = '';
+                const maxVisiblePages = 5;
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                
+                if (startPage > 1) {
+                    html += `<button onclick="goToPage(1)">«</button>`;
+                }
+                
+                if (currentPage > 1) {
+                    html += `<button onclick="goToPage(${currentPage - 1})">‹</button>`;
+                }
+                
+                for (let i = startPage; i <= endPage; i++) {
+                    html += `<button onclick="goToPage(${i})" ${i === currentPage ? 'class="active"' : ''}>${i}</button>`;
+                }
+                
+                if (currentPage < totalPages) {
+                    html += `<button onclick="goToPage(${currentPage + 1})">›</button>`;
+                }
+                
+                
+                if (endPage < totalPages) {
+                    html += `<button onclick="goToPage(${totalPages})">»</button>`;
+                }
+                
+                pagination.innerHTML = html;
+            }
+            
+            
+            function goToPage(page) {
+                currentPage = page;
+                updateTable();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            function showStatus(message, type) {
+                const statusElement = document.getElementById('status-message');
+                statusElement.textContent = message;
+                statusElement.className = `status-message ${type}`;
+                statusElement.style.display = 'block';
+            }
+            
+            
+            function hideStatus() {
+                document.getElementById('status-message').style.display = 'none';
+            }
+            
+            
+            function getSortValue(ospite, columnIndex) {
+                switch (columnIndex) {
+                    case 0: return ospite.ID;
+                    case 1: return ospite.nome.toLowerCase();
+                    case 2: return ospite.cognome.toLowerCase();
+                    case 3: return (ospite.azienda || '').toLowerCase();
+                    default: return '';
+                }
+            }
+            
+            function escapeHtml(unsafe) {
+                if (unsafe === null || unsafe === undefined) return '';
+                return unsafe.toString()
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+        </script>
+    </body>
+    </html>

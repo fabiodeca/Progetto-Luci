@@ -1,6 +1,6 @@
 <?php
 $servername = "localhost";
-$username = "dec_fab_user_1";
+$username = "dec_fab_user_2";
 $password = "1234";
 $dbname = "dec_fab_db_2";
 
@@ -13,13 +13,15 @@ if ($conn->connect_error) {
 $nome = $_POST['nome'];
 $cognome = $_POST['cognome'];
 $email = $_POST['email'];
-$tipo_visita = $_POST['tipo_visita'];
+$ID_Ospite = $_POST['ID_Ospite'];
 $azienda = $_POST['azienda'];
-$professione = $_POST['professione'];
 
-$sql = "INSERT INTO utenti (nome, cognome, email, tipo_visita, azienda, professione) VALUES (?, ?, ?, ?, ?, ?)";
+$hashed_ID_Ospite = password_hash($ID_Ospite, PASSWORD_DEFAULT);
+
+
+$sql = "INSERT INTO Ospiti (nome, cognome, email, ID_Ospite, azienda) VALUES (?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssss", $nome, $cognome, $email, $tipo_visita, $azienda, $professione);
+$stmt->bind_param("sssss", $nome, $cognome, $email, $hashed_ID_Ospite, $azienda);
 
 if ($stmt->execute()) {
     header("Location: index.html");
