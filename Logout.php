@@ -19,6 +19,9 @@
         </form>
         <p>Non sei ancora registrato?</p>
         <a href="register.html">Registrati</a>
+        <br>
+        <p>Sei già Loggato?</p>
+        <a href="Logout_page.php">Effettua il Logout</a>
     </div>
 </body>
 </html>

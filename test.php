@@ -58,13 +58,6 @@ if ($result->num_rows > 0) {
         echo "Errore: ID_Ospite non valido.";
         exit();
     }
-} else {
-    // Messaggio di debug per capire perché l'utente non viene trovato
-    echo "Errore: Utente non trovato nel database.<br>";
-    echo "Email ricevuta: $email<br>";
-    echo "ID_Ospite ricevuto: $ID_Ospite<br>";
-    echo "Verifica che l'email e l'ID_Ospite siano corretti e corrispondano ai dati nel database.";
-    exit();
 }
 
 $stmt->close();

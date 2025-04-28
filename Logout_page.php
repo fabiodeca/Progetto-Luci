@@ -18,7 +18,7 @@ if (!isset($_SESSION['csrf_token'])) {
         <h2>Effettua il Logout</h2>
         <form action="test.php" method="post">
             <input type="email" id="email" name="email" placeholder="Inserisci la tua email" required>
-            <input type="text" id="ID_Ospite" name="ID_Ospite" placeholder="Inserisci il tuo ID Ospite" required>
+            <input type="text" id="ID_Ospite" name="ID_Ospite" placeholder="Inserisci il tuo Codice" required>
             <button type="submit">Fai il Logout</button>
         </form>
     </div>
