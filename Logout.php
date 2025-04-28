@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style_index.css">
-    <title>Errore all'Accesso</title>
+    <title>Accedi per l'Entrata</title>
 </head>
 <body>
     
@@ -13,15 +13,12 @@
     <h2>Accedi</h2>
         <form action="verifica_login.php" method="post">
             <input type="text" name="email" placeholder="Email" required>
-            <input type="text" name="ID_Ospite" placeholder="Inserisci Il Codice Fornito" required>
-            <p style="color:red; font-size: 17px; margin-top: 2px; margin-bottom: 13px;">Codice Errato</p>
+            <input type="text" name="ID_Ospite" placeholder="Inserisci Il tuo Codice" required>
+            <p style="color:green; font-size: 17px; margin-top: 2px; margin-bottom: 13px;">Sloggato con Successo</p>
             <button type="submit">Invia</button>
         </form>
         <p>Non sei ancora registrato?</p>
         <a href="register.html">Registrati</a>
-        <br>
-        <p>Sei già Loggato?</p>
-        <a href="Logout_page.php">Effettua il Logout</a>
     </div>
 </body>
 </html>
