@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="collegamento-admin.css">
+    <title>Gestione Ospiti</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Elenco Ospiti</h1>
+        
+        <div class="table-header">
+            <button class="btn" onclick="refreshData()">Aggiorna Dati</button>
+        </div>
+        
+        <div class="table-responsive">
+            <table id="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Cognome</th>
+                        <th>Azienda</th>
+                        <th>Ora Ingresso</th>
+                        <th>Ora Uscita</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- I dati verranno caricati dinamicamente -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="status-message" class="status-message loading">
+            Caricamento dati in corso...
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+        });
+
+        async function loadData() {
+            try {
+                showStatus('Caricamento dati in corso...', 'loading');
+                
+                const response = await fetch('collegamento-admin.php');
+                if (!response.ok) {
+                    throw new Error(`Errore HTTP: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                updateTable(data);
+                hideStatus();
+            } catch (error) {
+                console.error('Errore nel caricamento dei dati:', error);
+                showStatus(`Errore: ${error.message}`, 'error');
+            }
+        }
+
+        function updateTable(data) {
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = data.map(row => `
+                <tr>
+                    <td>${row.ID_Visita}</td>
+                    <td>${row.nome}</td>
+                    <td>${row.cognome}</td>
+                    <td>${row.azienda || 'N/A'}</td>
+                    <td>${row.ingresso}</td>
+                    <td>${row.uscita || 'In visita'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function showStatus(message, type) {
+            const statusElement = document.getElementById('status-message');
+            statusElement.textContent = message;
+            statusElement.className = `status-message ${type}`;
+            statusElement.style.display = 'block';
+        }
+
+        function hideStatus() {
+            document.getElementById('status-message').style.display = 'none';
+        }
+
+        function refreshData() {
+            loadData();
+        }
+    </script>
+</body>
+</html>

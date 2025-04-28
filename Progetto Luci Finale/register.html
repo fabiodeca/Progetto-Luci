@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Style_Register.css">
+    <title>Registrazione</title>
+</head>
+<body>
+    
+    <div class="register-container">
+        <img src="register_icon.png" alt="login">
+    <h2>Registrarsi Per l'Entrata</h2>
+        <form action="register_page.php" method="post">
+            <input type="text" name="nome" placeholder="Nome" required>
+            <input type="text" name="cognome" placeholder="Cognome" required>
+            <input type="text" name="email" placeholder="Email" required>
+            <input type="password" id="ID_Ospite" name="ID_Ospite" placeholder="Crea il Codice Numerico Personale" maxlength="10" pattern="\d*" inputmode="numeric" required>
+            <input type="text" id="azienda" name="azienda" placeholder="Nome dell'Azienda di Provenienza" required>
+            <button type="submit">Registrati nell'Azienda</button>
+        </form>
+    </div>
+</body>
+</html>
