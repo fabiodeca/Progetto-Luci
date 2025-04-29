@@ -76,7 +76,7 @@ form {
 a{
     text-decoration: none;
     color: #28a745;
-    font-size: 20px !important; /* Aumentato da 15px a 17px */
+    font-size: 16px !important;
     display: block;
     text-align: center;
     margin-top: 5px;
@@ -86,7 +86,7 @@ a{
 p{
     text-align: center;
     margin-top: 15px;
-    font-size: 20px !important; /* Aumentato da 14px a 16px */
+    font-size: 18px !important;
     color: #555;
 }
 

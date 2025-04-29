@@ -10,7 +10,6 @@ if ($conn->connect_error) {
     die("Connessione fallita: " . $conn->connect_error);
 }
 
-// Recupera i dati dalla tabella Visite
 $sql = "SELECT v.ID_Visita, o.nome, o.cognome, o.azienda, v.ingresso, v.uscita
         FROM Visite v
         JOIN Ospiti o ON v.ID_Ospite = o.ID_Ospite";
@@ -23,7 +22,6 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Restituisci i dati in formato JSON
 header('Content-Type: application/json');
 echo json_encode($data);
 

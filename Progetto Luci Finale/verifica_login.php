@@ -15,7 +15,6 @@ if ($conn->connect_error) {
 $email = $_POST['email'];
 $ID_Ospite = $_POST['ID_Ospite'];
 
-// Verifica se l'utente è l'admin
 if ($email === "admin@admin.com" && $ID_Ospite === "1") {
     header("Location: collegamento-admin.html");
     exit();
